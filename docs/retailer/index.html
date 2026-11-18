@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrolleyWise — Retailer Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex">
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="w-64 bg-slate-900 border-r border-slate-800 p-6 flex flex-col justify-between shrink-0">
+        <div class="space-y-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                    <i class="fa-solid fa-store text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-white tracking-tight">TrolleyWise</h1>
+                    <span class="text-[10px] text-cyan-400 font-semibold uppercase tracking-wider">Retailer Admin</span>
+                </div>
+            </div>
+
+            <nav class="space-y-1">
+                <button onclick="switchTab('overview')" id="tab-overview" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-cyan-600/20 text-cyan-400 font-semibold text-xs transition">
+                    <i class="fa-solid fa-chart-pie w-5"></i>
+                    <span>Overview & Analytics</span>
+                </button>
+                <button onclick="switchTab('trolleys')" id="tab-trolleys" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white font-semibold text-xs transition">
+                    <i class="fa-solid fa-cart-shopping w-5"></i>
+                    <span>Trolley Fleet Monitor</span>
+                </button>
+                <button onclick="switchTab('catalogue')" id="tab-catalogue" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white font-semibold text-xs transition">
+                    <i class="fa-solid fa-boxes-stacked w-5"></i>
+                    <span>Product Catalogue</span>
+                </button>
+                <button onclick="switchTab('inventory')" id="tab-inventory" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white font-semibold text-xs transition">
+                    <i class="fa-solid fa-warehouse w-5"></i>
+                    <span>Inventory & Stock</span>
+                </button>
+                <button onclick="switchTab('anomalies')" id="tab-anomalies" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white font-semibold text-xs transition">
+                    <i class="fa-solid fa-triangle-exclamation w-5"></i>
+                    <span>Anomaly Incidents</span>
+                </button>
+                <button onclick="switchTab('transactions')" id="tab-transactions" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white font-semibold text-xs transition">
+                    <i class="fa-solid fa-receipt w-5"></i>
+                    <span>Transactions & Invoices</span>
+                </button>
+            </nav>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-800/80 border border-slate-700/60 text-xs">
+            <div class="text-slate-400 font-medium">Store Location:</div>
+            <div class="font-bold text-white mt-0.5">Bangalore Flagship</div>
+            <div class="text-[10px] text-cyan-400 font-mono mt-0.5">GSTIN: 29AAAAA0000A1Z5</div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 flex flex-col overflow-y-auto">
+        <!-- Top Nav -->
+        <header class="h-16 bg-slate-900 border-b border-slate-800 px-8 flex items-center justify-between shrink-0">
+            <div class="text-sm font-semibold text-slate-300 flex items-center space-x-2">
+                <span>Store Operation Console</span>
+                <span class="text-slate-600">/</span>
+                <span class="text-cyan-400" id="current-view-title">Overview</span>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <button onclick="syncOfflineQueue()" class="px-3.5 py-1.5 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 border border-cyan-500/40 text-cyan-300 text-xs font-semibold flex items-center space-x-2 transition">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                    <span>Sync Inventory & Offline Events</span>
+                </button>
+
+                <div class="flex items-center space-x-2 border-l border-slate-800 pl-4">
+                    <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-300">
+                        OP
+                    </div>
+                    <span class="text-xs font-medium text-slate-300">Store Operator</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Body -->
+        <div class="p-8 space-y-6 flex-1">
+
+            <!-- VIEW: OVERVIEW -->
+            <section id="view-overview" class="space-y-6">
+                <!-- KPI CARDS -->
+                <div class="grid grid-cols-4 gap-5">
+                    <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 shadow-sm">
+                        <div class="flex items-center justify-between text-slate-400 text-xs font-medium mb-2">
+                            <span>Completed Revenue</span>
+                            <i class="fa-solid fa-indian-rupee-sign text-emerald-400"></i>
+                        </div>
+                        <div class="text-2xl font-black text-white font-mono" id="stat-revenue">₹0.00</div>
+                        <div class="text-[11px] text-emerald-400 mt-1 flex items-center space-x-1 font-semibold">
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                            <span>Fully verified payments</span>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 shadow-sm">
+                        <div class="flex items-center justify-between text-slate-400 text-xs font-medium mb-2">
+                            <span>Active Trolleys</span>
+                            <i class="fa-solid fa-cart-shopping text-cyan-400"></i>
+                        </div>
+                        <div class="text-2xl font-black text-white font-mono" id="stat-trolleys">2 Online</div>
+                        <div class="text-[11px] text-slate-400 mt-1 font-mono">100% telemetry healthy</div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 shadow-sm">
+                        <div class="flex items-center justify-between text-slate-400 text-xs font-medium mb-2">
+                            <span>Unresolved Anomalies</span>
+                            <i class="fa-solid fa-triangle-exclamation text-amber-400"></i>
+                        </div>
+                        <div class="text-2xl font-black text-amber-400 font-mono" id="stat-anomalies">0 Pending</div>
+                        <div class="text-[11px] text-slate-400 mt-1">Audit log maintained</div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 shadow-sm">
+                        <div class="flex items-center justify-between text-slate-400 text-xs font-medium mb-2">
+                            <span>Low Stock Alerts</span>
+                            <i class="fa-solid fa-box text-rose-400"></i>
+                        </div>
+                        <div class="text-2xl font-black text-rose-400 font-mono" id="stat-low-stock">0 Items</div>
+                        <div class="text-[11px] text-slate-400 mt-1">Automatic replenishment</div>
+                    </div>
+                </div>
+
+                <!-- LIVE FLEET & RECENT TRANSACTIONS GRID -->
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-sm space-y-4">
+                        <h3 class="font-bold text-white text-sm flex items-center space-x-2">
+                            <i class="fa-solid fa-satellite-dish text-cyan-400"></i>
+                            <span>Live Trolley Telemetry</span>
+                        </h3>
+                        <div class="space-y-3" id="overview-trolley-list"></div>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-sm space-y-4">
+                        <h3 class="font-bold text-white text-sm flex items-center space-x-2">
+                            <i class="fa-solid fa-clock-rotate-left text-cyan-400"></i>
+                            <span>Recent Paid Invoices</span>
+                        </h3>
+                        <div class="space-y-2.5" id="overview-tx-list"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: TROLLEYS -->
+            <section id="view-trolleys" class="hidden space-y-4">
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-sm">
+                    <h3 class="font-bold text-white text-base mb-4">Smart Cart Fleet Status</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="text-slate-400 border-b border-slate-800 font-semibold uppercase">
+                                <tr>
+                                    <th class="pb-3">Trolley UUID</th>
+                                    <th class="pb-3">Status</th>
+                                    <th class="pb-3">Battery</th>
+                                    <th class="pb-3">IP Address</th>
+                                    <th class="pb-3">Firmware</th>
+                                    <th class="pb-3">Last Heartbeat</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trolleys-table-body" class="divide-y divide-slate-800/60 font-mono"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: CATALOGUE -->
+            <section id="view-catalogue" class="hidden space-y-4">
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-sm">
+                    <h3 class="font-bold text-white text-base mb-4">Store Product Catalogue & Calibration</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="text-slate-400 border-b border-slate-800 font-semibold uppercase">
+                                <tr>
+                                    <th class="pb-3">Product</th>
+                                    <th class="pb-3">SKU</th>
+                                    <th class="pb-3">Category</th>
+                                    <th class="pb-3">Price</th>
+                                    <th class="pb-3">Expected Weight</th>
+                                    <th class="pb-3">Tolerance</th>
+                                    <th class="pb-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="catalogue-table-body" class="divide-y divide-slate-800/60"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: INVENTORY -->
+            <section id="view-inventory" class="hidden space-y-4">
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-sm">
+                    <h3 class="font-bold text-white text-base mb-4">Inventory Ledger & Stock Levels</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="text-slate-400 border-b border-slate-800 font-semibold uppercase">
+                                <tr>
+                                    <th class="pb-3">SKU</th>
+                                    <th class="pb-3">Product Name</th>
+                                    <th class="pb-3">Current Stock</th>
+                                    <th class="pb-3">Min Alert Threshold</th>
+                                    <th class="pb-3">Stock Condition</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventory-table-body" class="divide-y divide-slate-800/60"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: ANOMALIES -->
+            <section id="view-anomalies" class="hidden space-y-4">
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-sm">
+                    <h3 class="font-bold text-white text-base mb-4">Auditable Discrepancy & Anomaly Log</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="text-slate-400 border-b border-slate-800 font-semibold uppercase">
+                                <tr>
+                                    <th class="pb-3">Incident ID</th>
+                                    <th class="pb-3">Type</th>
+                                    <th class="pb-3">Severity</th>
+                                    <th class="pb-3">Description</th>
+                                    <th class="pb-3">Status</th>
+                                    <th class="pb-3">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="anomalies-table-body" class="divide-y divide-slate-800/60"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: TRANSACTIONS -->
+            <section id="view-transactions" class="hidden space-y-4">
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-sm">
+                    <h3 class="font-bold text-white text-base mb-4">Confirmed Billing Transactions</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="text-slate-400 border-b border-slate-800 font-semibold uppercase">
+                                <tr>
+                                    <th class="pb-3">Invoice No</th>
+                                    <th class="pb-3">Trolley</th>
+                                    <th class="pb-3">Customer</th>
+                                    <th class="pb-3">Amount</th>
+                                    <th class="pb-3">Status</th>
+                                    <th class="pb-3">Date</th>
+                                    <th class="pb-3">Receipt</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactions-table-body" class="divide-y divide-slate-800/60 font-mono"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        window.addEventListener("DOMContentLoaded", async () => {
+            await loadAllData();
+        });
+
+        async function loadAllData() {
+            await loadStats();
+            await loadTrolleys();
+            await loadCatalogue();
+            await loadInventory();
+            await loadAnomalies();
+            await loadTransactions();
+        }
+
+        async function loadStats() {
+            try {
+                const res = await fetch("/api/retailer/dashboard-stats");
+                const stats = await res.json();
+                document.getElementById("stat-revenue").innerText = `₹${stats.total_revenue}`;
+                document.getElementById("stat-trolleys").innerText = `${stats.active_trolleys_count} Online`;
+                document.getElementById("stat-anomalies").innerText = `${stats.unresolved_anomalies_count} Pending`;
+                document.getElementById("stat-low-stock").innerText = `${stats.low_stock_alerts_count} Items`;
+            } catch (e) { console.error(e); }
+        }
+
+        async function loadTrolleys() {
+            try {
+                const res = await fetch("/api/retailer/trolleys");
+                const trolleys = await res.json();
+                
+                // Render table
+                const tbody = document.getElementById("trolleys-table-body");
+                tbody.innerHTML = "";
+                const overviewList = document.getElementById("overview-trolley-list");
+                overviewList.innerHTML = "";
+
+                trolleys.forEach(t => {
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="py-3 font-bold text-white">${t.device_uuid}</td>
+                            <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${t.status === 'SHOPPING' ? 'bg-cyan-500/20 text-cyan-300' : 'bg-emerald-500/20 text-emerald-300'}">${t.status}</span></td>
+                            <td class="py-3 text-emerald-400 font-bold">${t.battery_level}%</td>
+                            <td class="py-3 text-slate-400">${t.ip_address || '192.168.1.101'}</td>
+                            <td class="py-3 text-slate-400">${t.firmware_version}</td>
+                            <td class="py-3 text-slate-500 text-[10px]">${t.last_heartbeat || 'Just now'}</td>
+                        </tr>
+                    `;
+
+                    overviewList.innerHTML += `
+                        <div class="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 flex items-center justify-between text-xs">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-2.5 h-2.5 rounded-full ${t.status === 'OFFLINE' ? 'bg-rose-500' : 'bg-emerald-400'}"></div>
+                                <span class="font-bold text-white font-mono">${t.device_uuid}</span>
+                                <span class="text-slate-400 font-mono">(${t.ip_address})</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="text-emerald-400 font-mono font-bold">${t.battery_level}% Battery</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] bg-slate-700 text-slate-300">${t.status}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        async function loadCatalogue() {
+            try {
+                const res = await fetch("/api/products");
+                const prods = await res.json();
+                const tbody = document.getElementById("catalogue-table-body");
+                tbody.innerHTML = "";
+
+                prods.forEach(p => {
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="py-3 font-semibold text-white flex items-center space-x-2">
+                                <img src="${p.image_url}" class="w-8 h-8 rounded object-cover bg-slate-800">
+                                <span>${p.name}</span>
+                            </td>
+                            <td class="py-3 font-mono text-cyan-400 text-xs">${p.sku}</td>
+                            <td class="py-3 text-slate-300">${p.category_name}</td>
+                            <td class="py-3 font-mono font-bold text-white">₹${p.base_price}</td>
+                            <td class="py-3 font-mono text-slate-300">${p.expected_weight_grams}g</td>
+                            <td class="py-3 font-mono text-slate-400">±${p.weight_tolerance_grams}g</td>
+                            <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300">ACTIVE</span></td>
+                        </tr>
+                    `;
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        async function loadInventory() {
+            try {
+                const res = await fetch("/api/inventory");
+                const items = await res.json();
+                const tbody = document.getElementById("inventory-table-body");
+                tbody.innerHTML = "";
+
+                items.forEach(inv => {
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="py-3 font-mono text-cyan-400 text-xs">${inv.sku}</td>
+                            <td class="py-3 font-medium text-white">${inv.name}</td>
+                            <td class="py-3 font-mono font-bold text-white">${inv.current_stock} Units</td>
+                            <td class="py-3 font-mono text-slate-400">${inv.min_threshold} Units</td>
+                            <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${inv.is_low_stock ? 'bg-rose-500/20 text-rose-300' : 'bg-emerald-500/20 text-emerald-300'}">${inv.is_low_stock ? 'LOW STOCK' : 'HEALTHY'}</span></td>
+                        </tr>
+                    `;
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        async function loadAnomalies() {
+            try {
+                const res = await fetch("/api/anomalies");
+                const anomalies = await res.json();
+                const tbody = document.getElementById("anomalies-table-body");
+                tbody.innerHTML = "";
+
+                if (anomalies.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-slate-500">No active anomalies detected. System running smoothly.</td></tr>`;
+                    return;
+                }
+
+                anomalies.forEach(a => {
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="py-3 font-mono text-slate-400">#${a.id}</td>
+                            <td class="py-3 font-mono text-amber-400 font-semibold">${a.anomaly_type}</td>
+                            <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${a.severity === 'HIGH' ? 'bg-rose-500/20 text-rose-300' : 'bg-amber-500/20 text-amber-300'}">${a.severity}</span></td>
+                            <td class="py-3 text-slate-300 max-w-sm">${a.description}</td>
+                            <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300">${a.status}</span></td>
+                            <td class="py-3">
+                                <button onclick="staffResolveAnomaly(${a.id})" class="px-2.5 py-1 rounded bg-cyan-600 hover:bg-cyan-500 text-white text-[11px] font-semibold transition">
+                                    Override / Resolve
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        async function loadTransactions() {
+            try {
+                const res = await fetch("/api/retailer/transactions");
+                const txs = await res.json();
+                const tbody = document.getElementById("transactions-table-body");
+                tbody.innerHTML = "";
+                const overviewList = document.getElementById("overview-tx-list");
+                overviewList.innerHTML = "";
+
+                txs.forEach(tx => {
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="py-3 font-bold text-white">${tx.invoice_number}</td>
+                            <td class="py-3 text-cyan-400">${tx.trolley}</td>
+                            <td class="py-3 text-slate-300">${tx.customer}</td>
+                            <td class="py-3 font-bold text-emerald-400">₹${tx.final_amount}</td>
+                            <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${tx.status === 'PAID' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-700 text-slate-300'}">${tx.status}</span></td>
+                            <td class="py-3 text-slate-500 text-[10px]">${tx.created_at ? tx.created_at.substring(0, 16) : ''}</td>
+                            <td class="py-3">
+                                <a href="/api/receipts/${tx.id}/pdf" target="_blank" class="text-cyan-400 hover:underline text-xs">
+                                    <i class="fa-solid fa-file-pdf mr-1"></i>PDF
+                                </a>
+                            </td>
+                        </tr>
+                    `;
+
+                    overviewList.innerHTML += `
+                        <div class="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 flex items-center justify-between text-xs">
+                            <div>
+                                <div class="font-bold text-white font-mono">${tx.invoice_number}</div>
+                                <div class="text-slate-400 font-mono text-[11px]">${tx.customer} • ${tx.trolley}</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold text-emerald-400 font-mono text-sm">₹${tx.final_amount}</div>
+                                <span class="px-2 py-0.5 rounded text-[10px] ${tx.status === 'PAID' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-700 text-slate-300'}">${tx.status}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        async function staffResolveAnomaly(anomalyId) {
+            await fetch(`/api/anomalies/${anomalyId}/resolve`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    resolution_action: "STAFF_OVERRIDE",
+                    resolved_by: "STAFF_DASHBOARD",
+                    resolution_notes: "Operator reviewed item and basket, authorized override."
+                })
+            });
+            await loadAnomalies();
+            await loadStats();
+            alert(`Anomaly #${anomalyId} resolved by store staff override.`);
+        }
+
+        async function syncOfflineQueue() {
+            const res = await fetch("/api/inventory/synchronize", { method: "POST" });
+            const data = await res.json();
+            alert(`Sync Complete: ${data.synced_count} events synced. Status: ${data.status}`);
+            await loadAllData();
+        }
+
+        function switchTab(tab) {
+            const views = ["overview", "trolleys", "catalogue", "inventory", "anomalies", "transactions"];
+            views.forEach(v => {
+                document.getElementById(`view-${v}`).classList.add("hidden");
+                const btn = document.getElementById(`tab-${v}`);
+                btn.className = "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white font-semibold text-xs transition";
+            });
+
+            document.getElementById(`view-${tab}`).classList.remove("hidden");
+            const activeBtn = document.getElementById(`tab-${tab}`);
+            activeBtn.className = "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-cyan-600/20 text-cyan-400 font-semibold text-xs transition";
+            document.getElementById("current-view-title").innerText = tab.charAt(0).toUpperCase() + tab.slice(1);
+        }
+    </script>
+</body>
+</html>

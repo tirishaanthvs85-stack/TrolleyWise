@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrolleyWise — AI Smart Shopping Cart (Live Deployment)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between">
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur px-8 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                <i class="fa-solid fa-cart-shopping text-white text-lg"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold text-white tracking-tight">TrolleyWise</h1>
+                <p class="text-[10px] text-cyan-400 font-semibold uppercase tracking-wider">AI Autonomous Shopping Cart</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-4">
+            <a href="https://github.com/tirishaanthvs85-stack/TrolleyWise" target="_blank" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white border border-slate-700 flex items-center space-x-2 transition">
+                <i class="fa-brands fa-github text-sm"></i>
+                <span>GitHub Repository</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12 flex-1 flex flex-col justify-center">
+        <div class="text-center space-y-4 mb-12">
+            <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold">
+                <i class="fa-solid fa-microchip"></i>
+                <span>Indian Patent Architecture • Multimodal Product Verification</span>
+            </div>
+            <h2 class="text-4xl font-extrabold text-white tracking-tight sm:text-5xl">
+                Smart Shopping Cart System
+            </h2>
+            <p class="text-base text-slate-400 max-w-2xl mx-auto">
+                Explore the live deployed client applications for TrolleyWise. Connects physical product movement with verified digital billing in real time.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Card 1: Customer Touchscreen -->
+            <div class="p-8 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl flex flex-col justify-between hover:border-cyan-500/50 transition">
+                <div class="space-y-4">
+                    <div class="w-14 h-14 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-2xl shadow-inner">
+                        <i class="fa-solid fa-tablet-screen-button"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white">Customer Touchscreen Interface</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Mounted directly on the shopping cart basket. Displays the verified digital cart, live budget tracking, promotional offers, instant anomaly resolution dialogs, and dynamic UPI QR checkout.
+                    </p>
+                    <ul class="text-xs text-slate-400 space-y-1.5 pt-2">
+                        <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-cyan-400"></i><span>Interactive product placement & removal simulation</span></li>
+                        <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-cyan-400"></i><span>Live load-cell weight & IMU motion stability ticker</span></li>
+                        <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-cyan-400"></i><span>Dynamic UPI QR generation & instant PDF receipt</span></li>
+                    </ul>
+                </div>
+                <div class="pt-6">
+                    <a href="touchscreen/" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm flex items-center justify-center space-x-2 shadow-lg shadow-cyan-500/25 transition">
+                        <span>Launch Customer Touchscreen</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 2: Retailer Command Center -->
+            <div class="p-8 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl flex flex-col justify-between hover:border-cyan-500/50 transition">
+                <div class="space-y-4">
+                    <div class="w-14 h-14 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-2xl shadow-inner">
+                        <i class="fa-solid fa-desktop"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white">Retailer Command Center</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Store operator management console. Real-time fleet health monitoring, live inventory levels with automatic reorder alerts, auditable discrepancy resolution, and sales reporting.
+                    </p>
+                    <ul class="text-xs text-slate-400 space-y-1.5 pt-2">
+                        <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-blue-400"></i><span>Live smart cart battery, IP & heartbeat telemetry</span></li>
+                        <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-blue-400"></i><span>Store catalogue & load-cell calibration weights</span></li>
+                        <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-blue-400"></i><span>Discrepancy incident logs & staff override</span></li>
+                    </ul>
+                </div>
+                <div class="pt-6">
+                    <a href="retailer/" class="w-full py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 font-bold text-sm flex items-center justify-center space-x-2 shadow-lg transition">
+                        <span>Launch Retailer Dashboard</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/60 px-8 py-4 text-center text-xs text-slate-500">
+        TrolleyWise — AI-Powered Smart Shopping Cart System • Published on GitHub Pages
+    </footer>
+</body>
+</html>
