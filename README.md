@@ -1,9 +1,17 @@
 # TrolleyWise — AI-Powered Smart Shopping Cart System
 
+[![GitHub Repo](https://img.shields.io/badge/GitHub-TrolleyWise-181717.svg?logo=github)](https://github.com/tirishaanthvs85-stack/TrolleyWise)
+[![Live Demo](https://img.shields.io/badge/Deployment-Live%20Demo-brightgreen.svg)](https://tirishaanthvs85-stack.github.io/TrolleyWise/)
 [![Tests](https://img.shields.io/badge/Tests-26%2F26%20Passing-brightgreen.svg)]()
 [![Patent](https://img.shields.io/badge/Patent-Indian%20Filing-blue.svg)]()
 [![FastAPI](https://img.shields.io/badge/FastAPI-v0.143.0-teal.svg)]()
 [![Python](https://img.shields.io/badge/Python-3.11-yellow.svg)]()
+
+### 🌐 Live Deployment Links
+- **Portal & Architecture Showcase:** [https://tirishaanthvs85-stack.github.io/TrolleyWise/](https://tirishaanthvs85-stack.github.io/TrolleyWise/)
+- **Customer Touchscreen App:** [https://tirishaanthvs85-stack.github.io/TrolleyWise/touchscreen/](https://tirishaanthvs85-stack.github.io/TrolleyWise/touchscreen/)
+- **Retailer Command Center:** [https://tirishaanthvs85-stack.github.io/TrolleyWise/retailer/](https://tirishaanthvs85-stack.github.io/TrolleyWise/retailer/)
+- **GitHub Repository:** [https://github.com/tirishaanthvs85-stack/TrolleyWise](https://github.com/tirishaanthvs85-stack/TrolleyWise)
 
 Production-oriented implementation of **TrolleyWise**, an intelligent shopping cart transaction system adhering to the filed Indian patent specification:
 > **"TROLLEYWISE: AI-POWERED SMART SHOPPING CART WITH MULTIMODAL PRODUCT VERIFICATION, AUTOMATED BILLING AND ANOMALY DETECTION"**
