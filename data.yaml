@@ -1,0 +1,11 @@
+path: dataset
+
+train: images/train
+val: images/val
+
+names:
+  0: Milk
+  1: Bread
+  2: Rice
+  3: Soap
+  4: Chocolate

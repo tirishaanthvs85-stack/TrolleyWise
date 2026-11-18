@@ -1,0 +1,22 @@
+services:
+  trolleywise-backend:
+    build: .
+    container_name: trolleywise-edge-server
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./trolleywise.db
+      - SECRET_KEY=trolleywise-production-demo-key-2026
+      - STORE_CODE=TW-STORE-001
+      - STORE_NAME=TrolleyWise Hypermarket
+      - STORE_GSTIN=29AAAAA0000A1Z5
+    volumes:
+      - ./generated_receipts:/app/generated_receipts
+      - ./ai_models/weights:/app/ai_models/weights
+      - ./trolleywise.db:/app/trolleywise.db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/products"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
